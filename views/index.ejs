@@ -1,0 +1,49 @@
+<%- include("partials/header.ejs") %>
+
+  <h1>Previsioni Meteo</h1>
+
+  <form action="/search" method="POST" class="search-form">
+    <input type="text" name="latitude" placeholder="Latitudine" required />
+    <input type="text" name="longitude" placeholder="Longitudine" required />
+    <input type="submit" value="Cerca" />
+  </form>
+
+  <% if (locals.data && data.daily) { %>
+    <table class="weather-table">
+      <thead>
+        <tr>
+          <th>Giorno</th>
+          <th>Tempo</th>
+          <th>Temp Max (°C)</th>
+          <th>Temp Min (°C)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(let i=0; i < data.daily.time.length; i++) { %>
+          <tr>
+            <td>
+              <%= data.daily.time[i] %>
+            </td>
+            <td>
+              <%= weatherCodes[data.daily.weather_code[i]] || 'Sconosciuto' %>
+            </td>
+            <td>
+              <%= data.daily.temperature_2m_max[i] %>°C
+            </td>
+            <td>
+              <%= data.daily.temperature_2m_min[i] %>°C
+            </td>
+          </tr>
+          <% } %>
+      </tbody>
+    </table>
+    <% } else if (locals.error) { %>
+      <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        <p>
+          <%= error %>
+        </p>
+      </div>
+      <% }%>
+
+        <%- include("partials/footer.ejs") %>
